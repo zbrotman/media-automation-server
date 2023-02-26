@@ -128,6 +128,9 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Phoenix
+#     - PEER_PRIVATE_KEY_FILE=/run/secrets/wg-peer-private-key
+#    command:
+#      - "wg set wg0 private-key $PEER_PRIVATE_KEY"    
     ports:
       - 51820:51820/udp
       - 9090:9090
@@ -136,8 +139,10 @@ services:
 #      - /lib/modules:/lib/modules
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
-#      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.disable_ipv6=0
     restart: unless-stopped
+#    secrets:
+#      - wg-peer-private-key
     labels:
       - traefik.enable=false
       # - traefik.http.routers.wireguard.rule=Host(`qbit.snarky-jackal.com`)
@@ -212,3 +217,5 @@ secrets:
     file: /home/jackal/.secrets/cf_zone_api_token
   cf-dns-api-token:
     file: /home/jackal/.secrets/cf_dns_api_token
+#  wg-peer-private-key:
+#    file: /home/jackal/.secrets/wg_peer_private_key
