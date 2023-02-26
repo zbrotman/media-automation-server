@@ -1,4 +1,4 @@
-version: '1.12'
+version: '1.13'
 services:
   portainer:
     image: portainer/portainer-ce
@@ -26,7 +26,7 @@ services:
       # - traefik.http.routers.edge.tls.certresolver=lets-encrypt
 ####################################################
   jellyfin:
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin:10.8.9
     container_name: jellyfin
     user: '1001:1000'
     ports:
@@ -34,8 +34,8 @@ services:
     networks:
       - web
     volumes:
-      - jellyfin-config:/config
-      - jellyfin-cache:/cache
+      - /etc/jellyfin/config:/config
+      - /etc/jellyfin/cache:/cache
       - /data/media:/media
     restart: unless-stopped
     environment:
@@ -203,8 +203,8 @@ networks:
     external: true
 ####################################################
 volumes:
-  jellyfin-config:
-  jellyfin-cache:
+#  jellyfin-config:
+#  jellyfin-cache:
   data:
     external: true
   etc:
