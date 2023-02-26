@@ -136,7 +136,7 @@ services:
 #      - /lib/modules:/lib/modules
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
-#      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.disable_ipv6=0
     restart: unless-stopped
     labels:
       - traefik.enable=false
@@ -145,21 +145,21 @@ services:
       # - traefik.http.routers.wireguard.tls.certresolver=lets-encrypt
       # - traefik.http.services.wireguard.loadbalancer.server.port=9090
 ####################################################  
-  qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent
-    container_name: qbittorrent
-    network_mode: service:wireguard
-    environment:
-      - PUID=1005
-      - PGID=1001
-      - TZ=America/Phoenix
-      - WEBUI_PORT=9090
-    volumes:
-      - /etc/qbittorrent/config:/config
-      - /data/torrents:/data/torrents
-    restart: unless-stopped
-    labels:
-      - traefik.enable=false
+  # qbittorrent:
+  #   image: lscr.io/linuxserver/qbittorrent
+  #   container_name: qbittorrent
+  #   network_mode: service:wireguard
+  #   environment:
+  #     - PUID=1005
+  #     - PGID=1001
+  #     - TZ=America/Phoenix
+  #     - WEBUI_PORT=9090
+  #   volumes:
+  #     - /etc/qbittorrent/config:/config
+  #     - /data/torrents:/data/torrents
+  #   restart: unless-stopped
+  #   labels:
+  #     - traefik.enable=false
 ####################################################  
   traefik:
     # The official v2 Traefik docker image
