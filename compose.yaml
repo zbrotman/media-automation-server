@@ -1,0 +1,214 @@
+version: '1.12'
+services:
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    ports:
+      - 9000:9000
+    networks:
+      - web
+    volumes:
+      - /etc/portainer/data:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    labels:
+      #Frontend
+      - traefik.enable=true 
+      - traefik.http.routers.portainer.rule=Host(`portainer.snarky-jackal.com`) 
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.tls.certresolver=lets-encrypt
+      
+      # Edge 
+      # - traefik.http.routers.edge.rule=Host(`edge.snarky-jackal.com`) 
+      # - traefik.http.routers.edge.entrypoints=websecure
+      # - traefik.http.services.edge.loadbalancer.server.port=8000
+      # - traefik.http.routers.edge.service=edge
+      # - traefik.http.routers.edge.tls.certresolver=lets-encrypt
+####################################################
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    user: '1001:1000'
+    ports:
+      - 8096:8096/tcp
+    networks:
+      - web
+    volumes:
+      - jellyfin-config:/config
+      - jellyfin-cache:/cache
+      - /data/media:/media
+    restart: unless-stopped
+    environment:
+      - JELLYFIN_PublishedServerUrl=http://media.snarky-jackal.com
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.media.rule=Host(`media.snarky-jackal.com`)
+      - traefik.http.routers.media.entrypoints=websecure
+      - traefik.http.routers.media.tls.certresolver=lets-encrypt
+####################################################  
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1002
+      - PGID=1003
+      - TZ=America/Phoenix
+    volumes:
+      - /etc/sonarr:/config
+      - /data/media/tv:/tv #optional
+      - /data/torrents:/downloads #optional
+    group_add:
+      - "1001"
+      - "1000"
+    networks:
+      - web
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.snarky-jackal.com`)
+      - traefik.http.routers.sonarr.entrypoints=websecure
+      - traefik.http.routers.sonarr.tls.certresolver=lets-encrypt
+####################################################  
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1003
+      - PGID=1003
+      - TZ=America/Phoenix
+    volumes:
+      - /etc/radarr:/config
+      - /data/media/movies:/movies #optional
+      - /data/torrents:/downloads #optional
+    group_add:
+      - "1001"
+      - "1000"
+    networks:
+      - web
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.radarr.rule=Host(`radarr.snarky-jackal.com`)
+      - traefik.http.routers.radarr.entrypoints=websecure
+      - traefik.http.routers.radarr.tls.certresolver=lets-encrypt
+####################################################  
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1004
+      - PGID=1003
+      - TZ=America/Phoenix
+    volumes:
+      - /etc/prowlarr:/config
+    ports:
+      - 9696:9696
+    networks:
+      - web
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prowlerr.rule=Host(`prowlerr.snarky-jackal.com`)
+      - traefik.http.routers.prowlerr.entrypoints=websecure
+      - traefik.http.routers.prowlerr.tls.certresolver=lets-encrypt
+####################################################  
+  wireguard:
+    image: lscr.io/linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Phoenix
+    ports:
+      - 51820:51820/udp
+      - 9090:9090
+    volumes:
+      - /etc/wireguard-client:/config
+#      - /lib/modules:/lib/modules
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+#      - net.ipv6.conf.all.disable_ipv6=0
+    restart: unless-stopped
+    labels:
+      - traefik.enable=false
+      # - traefik.http.routers.wireguard.rule=Host(`qbit.snarky-jackal.com`)
+      # - traefik.http.routers.wireguard.entrypoints=websecure
+      # - traefik.http.routers.wireguard.tls.certresolver=lets-encrypt
+      # - traefik.http.services.wireguard.loadbalancer.server.port=9090
+####################################################  
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent
+    network_mode: service:wireguard
+    environment:
+      - PUID=1005
+      - PGID=1001
+      - TZ=America/Phoenix
+      - WEBUI_PORT=9090
+    volumes:
+      - /etc/qbittorrent/config:/config
+      - /data/torrents:/data/torrents
+    restart: unless-stopped
+    labels:
+      - traefik.enable=false
+####################################################  
+  traefik:
+    # The official v2 Traefik docker image
+    image: traefik:v2.9
+    # Enables the web UI and tells Traefik to listen to docker
+    container_name: traefik
+    environment:
+      - CLOUDFLARE_EMAIL_FILE=/run/secrets/cf-dns-api-token
+      - CLOUDFLARE_ZONE_API_TOKEN_FILE=/run/secrets/cf-zone-api-token
+      - CLOUDFLARE_DNS_API_TOKEN_FILE=/run/secrets/cf-dns-api-token
+    #  - CLOUDFLARE_POLLING_INTERVAL=15
+      - CLOUDFLARE_PROPAGATION_TIMEOUT=300
+      - CLOUDFLARE_TTL = 300
+    #command:
+    #- "--log.level=DEBUG"
+    networks:
+      - web
+    ports:
+      # The HTTP port
+      - 8085:8085
+      # The Web UI (enabled by --api.insecure=true)
+      - 443:443
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/traefik/traefik.toml:/traefik.toml
+      - /etc/traefik/traefik_dynamic.toml:/traefik_dynamic.toml
+      - /etc/traefik/acme.json:/acme.json
+    secrets:
+      - cf-api-email
+      - cf-dns-api-token
+      - cf-zone-api-token
+####################################################
+networks:
+  web:
+    external: true
+####################################################
+volumes:
+  jellyfin-config:
+  jellyfin-cache:
+  data:
+    external: true
+  etc:
+    external: true
+####################################################
+secrets:
+  cf-api-email:
+    file: /home/jackal/.secrets/cf_email
+  cf-zone-api-token:
+    file: /home/jackal/.secrets/cf_zone_api_token
+  cf-dns-api-token:
+    file: /home/jackal/.secrets/cf_dns_api_token
