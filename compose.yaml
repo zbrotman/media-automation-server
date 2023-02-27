@@ -139,9 +139,9 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.prowlerr.rule=Host(`prowlerr.snarky-jackal.com`)
-      - traefik.http.routers.prowlerr.entrypoints=websecure
-      - traefik.http.routers.prowlerr.tls.certresolver=lets-encrypt
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.snarky-jackal.com`)
+      - traefik.http.routers.prowlarr.entrypoints=websecure
+      - traefik.http.routers.prowlarr.tls.certresolver=lets-encrypt
 ####################################################  
   wireguard:
     image: lscr.io/linuxserver/wireguard
