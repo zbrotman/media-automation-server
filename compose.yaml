@@ -62,7 +62,7 @@ services:
       - /data/media/public/tv:/tv #optional
       - /data/torrents/public/:/downloads #optional
     group_add:
-      - torrents
+      - "1001"
     networks:
       - web
     ports:
@@ -87,7 +87,7 @@ services:
       - /data/media/private/tv:/tv #optional
       - /data/torrents/private/:/downloads #optional
     group_add:
-      - torrents
+      - "1001"
     networks:
       - web
     ports:
@@ -112,7 +112,7 @@ services:
       - /data/media/public/movies:/movies #optional
       - /data/torrents/public:/downloads #optional
     group_add:
-      - torrents
+      - "1001"
     networks:
       - web
     ports:
