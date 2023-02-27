@@ -39,26 +39,26 @@ services:
       - /data/media:/media
     restart: unless-stopped
     environment:
-      - JELLYFIN_PublishedServerUrl=http://media.snarky-jackal.com
+      - JELLYFIN_PublishedServerUrl=http://watch.snarky-jackal.com
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.media.rule=Host(`media.snarky-jackal.com`)
+      - traefik.http.routers.media.rule=Host(`watch.snarky-jackal.com`)
       - traefik.http.routers.media.entrypoints=websecure
       - traefik.http.routers.media.tls.certresolver=lets-encrypt
-####################################################  
-  sonarr:
+####################################################
+  sonarr-public:
     image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
+    container_name: sonarr-public
     environment:
       - PUID=1002
       - PGID=1003
       - TZ=America/Phoenix
     volumes:
-      - /etc/sonarr:/config
-      - /data/media/tv:/tv #optional
-      - /data/torrents:/downloads #optional
+      - /etc/sonarr/public:/config
+      - /data/media/public/tv:/tv #optional
+      - /data/torrents/public/:/downloads #optional
     group_add:
       - "1001"
       - "1000"
@@ -69,21 +69,46 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sonarr.rule=Host(`sonarr.snarky-jackal.com`)
-      - traefik.http.routers.sonarr.entrypoints=websecure
-      - traefik.http.routers.sonarr.tls.certresolver=lets-encrypt
+      - traefik.http.routers.sonarr-main.rule=Host(`tv.snarky-jackal.com`)
+      - traefik.http.routers.sonarr-main.entrypoints=websecure
+      - traefik.http.routers.sonarr-main.tls.certresolver=lets-encrypt
+  ####################################################
+  sonarr-private:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr-private
+    environment:
+      - PUID=1002
+      - PGID=1003
+      - TZ=America/Phoenix
+    volumes:
+      - /etc/sonarr/private:/config
+      - /data/media/private/tv:/tv #optional
+      - /data/torrents/private/:/downloads #optional
+    group_add:
+      - "1001"
+      - "1000"
+    networks:
+      - web
+    ports:
+      - 8888:8888
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.sonarr-anime.rule=Host(`priv-tv.snarky-jackal.com`)
+      - traefik.http.routers.sonarr-anime.entrypoints=websecure
+      - traefik.http.routers.sonarr-anime.tls.certresolver=lets-encrypt
 ####################################################  
-  radarr:
+  radarr-public:
     image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
+    container_name: radarr-public
     environment:
       - PUID=1003
       - PGID=1003
       - TZ=America/Phoenix
     volumes:
-      - /etc/radarr:/config
-      - /data/media/movies:/movies #optional
-      - /data/torrents:/downloads #optional
+      - /etc/radarr/public:/config
+      - /data/media/public/movies:/movies #optional
+      - /data/torrents/public:/downloads #optional
     group_add:
       - "1001"
       - "1000"
@@ -94,9 +119,9 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.radarr.rule=Host(`radarr.snarky-jackal.com`)
-      - traefik.http.routers.radarr.entrypoints=websecure
-      - traefik.http.routers.radarr.tls.certresolver=lets-encrypt
+      - traefik.http.routers.radarr-public.rule=Host(`movies.snarky-jackal.com`)
+      - traefik.http.routers.radarr-public.entrypoints=websecure
+      - traefik.http.routers.radarr-public.tls.certresolver=lets-encrypt
 ####################################################  
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
