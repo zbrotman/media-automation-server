@@ -153,6 +153,9 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Phoenix    
+    networks:
+      - web
+      - default
     ports:
       - 51820:51820/udp
       - 9090:9090
