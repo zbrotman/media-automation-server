@@ -59,8 +59,7 @@ services:
       - TZ=America/Phoenix
     volumes:
       - /etc/sonarr/public:/config
-      - /data/media/public/tv:/tv #optional
-      - /data/torrents/public/:/downloads #optional
+      - /data:/data #optional
     group_add:
       - "1001"
     networks:
@@ -84,8 +83,7 @@ services:
       - TZ=America/Phoenix
     volumes:
       - /etc/sonarr/private:/config
-      - /data/media/private/tv:/tv #optional
-      - /data/torrents/private/:/downloads #optional
+      - /data:/data #optional
     group_add:
       - "1001"
     networks:
@@ -109,8 +107,7 @@ services:
       - TZ=America/Phoenix
     volumes:
       - /etc/radarr/public:/config
-      - /data/media/public/movies:/movies #optional
-      - /data/torrents/public:/downloads #optional
+      - /data:/data #optional
     group_add:
       - "1001"
     networks:
