@@ -199,7 +199,7 @@ services:
     image: traefik:v2.9
     # Enables the web UI and tells Traefik to listen to docker
     container_name: traefik
-    user: "1010:1007"
+#    user: "1010:1007"
     environment:
       - CLOUDFLARE_EMAIL_FILE=/run/secrets/cf-dns-api-token
       - CLOUDFLARE_ZONE_API_TOKEN_FILE=/run/secrets/cf-zone-api-token
