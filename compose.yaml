@@ -53,15 +53,14 @@ services:
     container_name: sonarr-public
     environment:
       - PUID=1002
-      - PGID=1003
+      - PGID=1000
       - TZ=America/Phoenix
     volumes:
       - /etc/sonarr/public:/config
       - /data/media/public/tv:/tv #optional
       - /data/torrents/public/:/downloads #optional
     group_add:
-      - "1001"
-      - "1000"
+      - torrents
     networks:
       - web
     ports:
@@ -77,16 +76,15 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr-private
     environment:
-      - PUID=1002
-      - PGID=1003
+      - PUID=1006
+      - PGID=1000
       - TZ=America/Phoenix
     volumes:
       - /etc/sonarr/private:/config
       - /data/media/private/tv:/tv #optional
       - /data/torrents/private/:/downloads #optional
     group_add:
-      - "1001"
-      - "1000"
+      - torrents
     networks:
       - web
     ports:
@@ -103,15 +101,14 @@ services:
     container_name: radarr-public
     environment:
       - PUID=1003
-      - PGID=1003
+      - PGID=1000
       - TZ=America/Phoenix
     volumes:
       - /etc/radarr/public:/config
       - /data/media/public/movies:/movies #optional
       - /data/torrents/public:/downloads #optional
     group_add:
-      - "1001"
-      - "1000"
+      - torrents
     networks:
       - web
     ports:
@@ -128,7 +125,7 @@ services:
     container_name: prowlarr
     environment:
       - PUID=1004
-      - PGID=1003
+      - PGID=1006
       - TZ=America/Phoenix
     volumes:
       - /etc/prowlarr:/config
@@ -150,8 +147,8 @@ services:
       - NET_ADMIN
       - SYS_MODULE
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=1008
+      - PGID=1005
       - TZ=America/Phoenix    
     networks:
       - web
@@ -195,6 +192,7 @@ services:
     image: traefik:v2.9
     # Enables the web UI and tells Traefik to listen to docker
     container_name: traefik
+    user: traefik
     environment:
       - CLOUDFLARE_EMAIL_FILE=/run/secrets/cf-dns-api-token
       - CLOUDFLARE_ZONE_API_TOKEN_FILE=/run/secrets/cf-zone-api-token
