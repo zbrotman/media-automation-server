@@ -152,16 +152,12 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/Phoenix
-#     - PEER_PRIVATE_KEY_FILE=/run/secrets/wg-peer-private-key
-#    command:
-#      - "wg set wg0 private-key $PEER_PRIVATE_KEY"    
+      - TZ=America/Phoenix    
     ports:
       - 51820:51820/udp
       - 9090:9090
     volumes:
       - /etc/wireguard-client:/config
-#      - /lib/modules:/lib/modules
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
       - net.ipv6.conf.all.disable_ipv6=0
@@ -169,11 +165,11 @@ services:
 #    secrets:
 #      - wg-peer-private-key
     labels:
-      - traefik.enable=false
-      # - traefik.http.routers.wireguard.rule=Host(`qbit.snarky-jackal.com`)
-      # - traefik.http.routers.wireguard.entrypoints=websecure
-      # - traefik.http.routers.wireguard.tls.certresolver=lets-encrypt
-      # - traefik.http.services.wireguard.loadbalancer.server.port=9090
+      - traefik.enable=true
+      - traefik.http.routers.wireguard.rule=Host(`qbit.snarky-jackal.com`)
+      - traefik.http.routers.wireguard.entrypoints=websecure
+      - traefik.http.routers.wireguard.tls.certresolver=lets-encrypt
+      - traefik.http.services.wireguard.loadbalancer.server.port=9090
 ####################################################  
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
