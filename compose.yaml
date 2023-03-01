@@ -39,9 +39,9 @@ services:
       - /data/media:/media
     devices:
       - /dev/dri:/dev/dri
-    group_add:
-      - "486"
-      - "483"
+    # group_add:
+    #   - "486"
+    #   - "483"
     restart: unless-stopped
     environment:
       - JELLYFIN_PublishedServerUrl=http://watch.snarky-jackal.com
