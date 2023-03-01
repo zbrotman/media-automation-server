@@ -26,9 +26,15 @@ services:
       # - traefik.http.routers.edge.tls.certresolver=lets-encrypt
 ####################################################
   jellyfin:
-    image: lscr.io/linuxserver/jellyfin:10.8.9
+    image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
-    user: '1001:1000'
+    environment:
+      - PUID=1001
+      - PGID=1000
+      - UMASK=002
+      - TZ=America/Phoenix
+      - JELLYFIN_PublishedServerUrl=http://watch.snarky-jackal.com
+      - DOCKER_MODS=linuxserver/mods:jellyfin-amd
     ports:
       - 8096:8096/tcp
     networks:
@@ -39,14 +45,7 @@ services:
       - /data/media:/media
     devices:
       - /dev/dri:/dev/dri
-    # group_add:
-    #   - "486"
-    #   - "483"
     restart: unless-stopped
-    environment:
-      - JELLYFIN_PublishedServerUrl=http://watch.snarky-jackal.com
-      - UMASK=002
-      - DOCKER_MODS=linuxserver/mods:jellyfin-amd
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
