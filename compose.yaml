@@ -172,6 +172,13 @@ services:
     restart: unless-stopped
 #    secrets:
 #      - wg-peer-private-key
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
     labels:
       - traefik.enable=true
       - traefik.http.routers.wireguard.rule=Host(`qbit.snarky-jackal.com`)
@@ -182,6 +189,9 @@ services:
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
+    depends_on:
+      wireguard:
+        condition: service_healthy
     network_mode: service:wireguard
     environment:
       - PUID=1005
