@@ -172,12 +172,11 @@ services:
     restart: unless-stopped
 #    secrets:
 #      - wg-peer-private-key
-    healthcheck:
-      test: ["CMD", "curl", "-s", "https://am.i.mullvad.net/connected"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+#    healthcheck:
+#     interval: 1m30s
+#     timeout: 10s
+#     retries: 3
+#     start_period: 40s
 
     labels:
       - traefik.enable=true
@@ -190,8 +189,7 @@ services:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
     depends_on:
-      wireguard:
-        condition: service_healthy
+      - wireguard
     network_mode: service:wireguard
     environment:
       - PUID=1005
