@@ -38,7 +38,8 @@ services:
       - /etc/jellyfin/cache:/cache
       - /data/media:/media
     devices:
-      - /dev/dri:/dev/dri/
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card0:/dev/dri/card0
     group_add:
       - "486"
       - "483"
