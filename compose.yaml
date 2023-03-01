@@ -173,7 +173,7 @@ services:
 #    secrets:
 #      - wg-peer-private-key
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "curl", "-s", "https://am.i.mullvad.net/connected"]
       interval: 1m30s
       timeout: 10s
       retries: 3
