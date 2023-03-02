@@ -160,7 +160,7 @@ services:
       - TZ=America/Phoenix    
     networks:
       - web
-      - prod_default
+#      - prod_default
     ports:
       - 51820:51820/udp
       - 9090:9090
