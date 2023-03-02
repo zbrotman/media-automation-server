@@ -249,12 +249,12 @@ volumes:
   etc:
     external: true
 ####################################################
-# secrets:
-#   cf-api-email:
-#     file: /home/jackal/.secrets/cf_email
-#   cf-zone-api-token:
-#     file: /home/jackal/.secrets/cf_zone_api_token
-#   cf-dns-api-token:
-#     file: /home/jackal/.secrets/cf_dns_api_token
-#  wg-peer-private-key:
-#    file: /home/jackal/.secrets/wg_peer_private_key
+secrets:
+  cf-api-email:
+    file: /home/jackal/.secrets/cf_email
+  cf-zone-api-token:
+    file: /home/jackal/.secrets/cf_zone_api_token
+  cf-dns-api-token:
+    file: /home/jackal/.secrets/cf_dns_api_token
+ wg-peer-private-key:
+   file: /home/jackal/.secrets/wg_peer_private_key
