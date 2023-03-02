@@ -24,36 +24,36 @@ services:
       # - traefik.http.services.edge.loadbalancer.server.port=8000
       # - traefik.http.routers.edge.service=edge
       # - traefik.http.routers.edge.tls.certresolver=lets-encrypt
-####################################################
-  # jellyfin:
-  #   image: linux_server/jellyfin:latest
-  #   container_name: jellyfin
-  #   environment:
-  #     - PUID=1001
-  #     - PGID=1000
-  #     - UMASK=002
-  #     - TZ=America/Phoenix
-  #     - JELLYFIN_PublishedServerUrl=http://watch.snarky-jackal.com
-  #     - DOCKER_MODS=linuxserver/mods:jellyfin-amd
-  #   ports:
-  #     - 8096:8096/tcp
-  #   networks:
-  #     - web
-  #   volumes:
-  #     - /etc/jellyfin/config:/config
-  #     - /etc/jellyfin/cache:/cache
-  #     - /data/media:/media
-  #   devices:
-  #     - /dev/dri:/dev/dri
-  #   restart: unless-stopped
-  #   extra_hosts:
-  #     - "host.docker.internal:host-gateway"
-    # labels:
-    #   - traefik.enable=true
-    #   - traefik.http.routers.media.rule=Host(`watch.snarky-jackal.com`)
-    #   - traefik.http.routers.media.entrypoints=websecure
-    #   - traefik.http.routers.media.tls.certresolver=lets-encrypt
-####################################################
+###################################################
+  jellyfin:
+    image: docker.io/jackal13/jellyfin-amd
+    container_name: jellyfin
+    environment:
+      - PUID=1001
+      - PGID=1000
+      - UMASK=002
+      - TZ=America/Phoenix
+      - JELLYFIN_PublishedServerUrl=http://watch.snarky-jackal.com
+      - DOCKER_MODS=linuxserver/mods:jellyfin-amd
+    ports:
+      - 8096:8096/tcp
+    networks:
+      - web
+    volumes:
+      - /etc/jellyfin/config:/config
+      - /etc/jellyfin/cache:/cache
+      - /data/media:/media
+    devices:
+      - /dev/dri:/dev/dri
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.media.rule=Host(`watch.snarky-jackal.com`)
+      - traefik.http.routers.media.entrypoints=websecure
+      - traefik.http.routers.media.tls.certresolver=lets-encrypt
+###################################################
   sonarr-public:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr-public
@@ -184,26 +184,26 @@ services:
 #       - traefik.http.routers.wireguard.entrypoints=websecure
 #       - traefik.http.routers.wireguard.tls.certresolver=lets-encrypt
 #       - traefik.http.services.wireguard.loadbalancer.server.port=9090
-####################################################  
-  qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent
-    container_name: qbittorrent
-    depends_on:
-      - wireguard
-    network_mode: service:wireguard
-    environment:
-      - PUID=1005
-      - PGID=1001
-      - UMASK=002
-      - TZ=America/Phoenix
-      - WEBUI_PORT=9090
-    volumes:
-      - /etc/qbittorrent/config:/config
-      - /data/torrents:/data/torrents
-    restart: unless-stopped
-    labels:
-      - traefik.enable=false
-####################################################  
+# ####################################################  
+#   qbittorrent:
+#     image: lscr.io/linuxserver/qbittorrent
+#     container_name: qbittorrent
+#     depends_on:
+#       - wireguard
+#     network_mode: service:wireguard
+#     environment:
+#       - PUID=1005
+#       - PGID=1001
+#       - UMASK=002
+#       - TZ=America/Phoenix
+#       - WEBUI_PORT=9090
+#     volumes:
+#       - /etc/qbittorrent/config:/config
+#       - /data/torrents:/data/torrents
+#     restart: unless-stopped
+#     labels:
+#       - traefik.enable=false
+# ####################################################  
   traefik:
     # The official v2 Traefik docker image
     image: traefik:v2.9
