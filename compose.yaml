@@ -172,7 +172,7 @@ services:
     restart: unless-stopped
     secrets:
       - wg-peer-private-key
-    healthcheck:
+#    healthcheck:
     interval: 1m30s
     timeout: 10s
     retries: 3
