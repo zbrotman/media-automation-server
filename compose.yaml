@@ -160,7 +160,7 @@ services:
       - TZ=America/Phoenix    
     networks:
       - web
-      - default
+      - prod_default
     ports:
       - 51820:51820/udp
       - 9090:9090
@@ -240,7 +240,6 @@ services:
 networks:
   web:
     external: true
-  default:
 ####################################################
 volumes:
 #  jellyfin-config:
