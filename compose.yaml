@@ -1,22 +1,22 @@
 version: '2'
 services:
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    ports:
-      - 9000:9000
-    networks:
-      - web
-    volumes:
-      - /etc/portainer/data:/config
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
-    labels:
-      #Frontend
-      - traefik.enable=true 
-      - traefik.http.routers.portainer.rule=Host(`portainer.snarky-jackal.com`) 
-      - traefik.http.routers.portainer.entrypoints=websecure
-      - traefik.http.routers.portainer.tls.certresolver=lets-encrypt
+  # portainer:
+  #   image: portainer/portainer-ce
+  #   container_name: portainer
+  #   ports:
+  #     - 9000:9000
+  #   networks:
+  #     - web
+  #   volumes:
+  #     - /etc/portainer/data:/config
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   restart: unless-stopped
+  #   labels:
+  #     #Frontend
+  #     - traefik.enable=true 
+  #     - traefik.http.routers.portainer.rule=Host(`portainer.snarky-jackal.com`) 
+  #     - traefik.http.routers.portainer.entrypoints=websecure
+  #     - traefik.http.routers.portainer.tls.certresolver=lets-encrypt
       
       # Edge 
       # - traefik.http.routers.edge.rule=Host(`edge.snarky-jackal.com`) 
@@ -26,7 +26,7 @@ services:
       # - traefik.http.routers.edge.tls.certresolver=lets-encrypt
 ####################################################
   jellyfin:
-    image: lscr.io/linuxserver/jellyfin:latest
+    image: linux_server/jellyfin:latest
     container_name: jellyfin
     environment:
       - PUID=1001
