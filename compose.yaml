@@ -160,7 +160,7 @@ services:
       - TZ=America/Phoenix    
     networks:
       - web
-      - bridge
+      - default
     ports:
       - 51820:51820/udp
       - 9090:9090
@@ -240,6 +240,7 @@ services:
 networks:
   web:
     external: true
+  default:
 ####################################################
 volumes:
 #  jellyfin-config:
