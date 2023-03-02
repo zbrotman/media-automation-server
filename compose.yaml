@@ -256,5 +256,5 @@ secrets:
     file: /home/jackal/.secrets/cf_zone_api_token
   cf-dns-api-token:
     file: /home/jackal/.secrets/cf_dns_api_token
- wg-peer-private-key:
+  wg-peer-private-key:
    file: /home/jackal/.secrets/wg_peer_private_key
