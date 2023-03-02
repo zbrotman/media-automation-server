@@ -146,45 +146,45 @@ services:
       - traefik.http.routers.prowlarr.rule=Host(`prowlarr.snarky-jackal.com`)
       - traefik.http.routers.prowlarr.entrypoints=websecure
       - traefik.http.routers.prowlarr.tls.certresolver=lets-encrypt
-# ####################################################  
-#   wireguard:
-#     image: lscr.io/linuxserver/wireguard
-#     container_name: wireguard
-#     cap_add:
-#       - NET_ADMIN
-#       - SYS_MODULE
-#     environment:
-#       - PUID=1008
-#       - PGID=1005
-#       - UMASK=002
-#       - TZ=America/Phoenix    
-#     networks:
-#       - web
-# #      - prod_default
-#     ports:
-#       - 51820:51820/udp
-#       - 9090:9090
-#     volumes:
-#       - /etc/wireguard-client:/config
-#     sysctls:
-#       - net.ipv4.conf.all.src_valid_mark=1
-#       - net.ipv6.conf.all.disable_ipv6=0
-#     restart: unless-stopped
-# #    secrets:
-# #      - wg-peer-private-key
-# #    healthcheck:
-# #     interval: 1m30s
-# #     timeout: 10s
-# #     retries: 3
-# #     start_period: 40s
+####################################################  
+  wireguard:
+    image: lscr.io/linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1008
+      - PGID=1005
+      - UMASK=002
+      - TZ=America/Phoenix    
+    networks:
+      - web
+      - default
+    ports:
+      - 51820:51820/udp
+      - 9090:9090
+    volumes:
+      - /etc/wireguard-client:/config
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=0
+    restart: unless-stopped
+    secrets:
+      - wg-peer-private-key
+    healthcheck:
+    interval: 1m30s
+    timeout: 10s
+    retries: 3
+    start_period: 40s
 
-#     labels:
-#       - traefik.enable=true
-#       - traefik.http.routers.wireguard.rule=Host(`qbit.snarky-jackal.com`)
-#       - traefik.http.routers.wireguard.entrypoints=websecure
-#       - traefik.http.routers.wireguard.tls.certresolver=lets-encrypt
-#       - traefik.http.services.wireguard.loadbalancer.server.port=9090
-# ####################################################  
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.wireguard.rule=Host(`qbit.snarky-jackal.com`)
+      - traefik.http.routers.wireguard.entrypoints=websecure
+      - traefik.http.routers.wireguard.tls.certresolver=lets-encrypt
+      - traefik.http.services.wireguard.loadbalancer.server.port=9090
+####################################################  
 #   qbittorrent:
 #     image: lscr.io/linuxserver/qbittorrent
 #     container_name: qbittorrent
