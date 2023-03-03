@@ -125,6 +125,30 @@ services:
       - traefik.http.routers.radarr-public.rule=Host(`movies.snarky-jackal.com`)
       - traefik.http.routers.radarr-public.entrypoints=websecure
       - traefik.http.routers.radarr-public.tls.certresolver=lets-encrypt
+####################################################
+lidarr-public:
+    image: linuxserver/lidarr:latest
+    container_name: lidarr-public
+    environment:
+      - PUID=1011
+      - PGID=1000
+      - UMASK=002
+      - TZ=America/Phoenix
+    volumes:
+      - /etc/lidarr/public:/config
+      - /data:/data #optional
+    group_add:
+      - "1001"
+    networks:
+      - web
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.lidarr-public.rule=Host(`music.snarky-jackal.com`)
+      - traefik.http.routers.lidarr-public.entrypoints=websecure
+      - traefik.http.routers.lidarr-public.tls.certresolver=lets-encrypt
 ####################################################  
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
