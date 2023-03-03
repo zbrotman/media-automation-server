@@ -26,7 +26,7 @@ services:
       # - traefik.http.routers.edge.tls.certresolver=lets-encrypt
 ###################################################
   jellyfin:
-    image: docker.io/jackal13/jellyfin-amd
+    image: linuxserver/jellyfin
     container_name: jellyfin
     environment:
       - PUID=1001
