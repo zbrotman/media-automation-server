@@ -196,11 +196,12 @@ lidarr-public:
     restart: unless-stopped
     secrets:
       - wg-peer-private-key
-#    healthcheck:
-    # interval: 1m30s
-    # timeout: 10s
-    # retries: 3
-    # start_period: 40s
+    healthcheck:
+      test: echo `ifconfig wg0` | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00" || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 2 0s
 
     labels:
       - traefik.enable=true
@@ -213,7 +214,8 @@ lidarr-public:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
     depends_on:
-      - wireguard
+      wireguard:
+        condition: service_healthy
     network_mode: service:wireguard
     environment:
       - PUID=1005
