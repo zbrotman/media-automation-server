@@ -126,7 +126,7 @@ services:
       - traefik.http.routers.radarr-public.entrypoints=websecure
       - traefik.http.routers.radarr-public.tls.certresolver=lets-encrypt
 ####################################################
-lidarr-public:
+  lidarr-public:
     image: linuxserver/lidarr:latest
     container_name: lidarr-public
     environment:
