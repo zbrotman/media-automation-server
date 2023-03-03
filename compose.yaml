@@ -196,12 +196,12 @@ services:
     restart: unless-stopped
     secrets:
       - wg-peer-private-key
-    # healthcheck:
-    #   test: echo `ifconfig wg0` | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00" || exit 1
-    #   interval: 1m30s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 20s
+    healthcheck:
+      test: echo `ifconfig wg0` | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00" || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
     labels:
       - traefik.enable=true
