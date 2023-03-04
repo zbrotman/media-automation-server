@@ -255,14 +255,14 @@ services:
       KEYCLOAK_MANAGEMENT_PASSWORD_FILE: /run/secrets/keycloak-management-passwd
       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
       #JDBC_PARAMS: "ssl=true"
-      KEYCLOAK_DATABASE_HOST: POSTGRES
-      KEYCLOAK_DATABASE_NAME: keycloak
-      KEYCLOAK_DATABASE_USER: keycloak
-      KEYCLOAK_DATABASE_PASSWORD: /run/secrets/postgres-passwd
-      KEYCLOAK_DATABASE_SCHEMA: public
-      KEYCLOAK_PROXY: edge
-      KEYCLOAK_LOGLEVEL: DEBUG
+      DB_VENDOR: POSTGRES
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD_FILE: /run/secrets/postgres-passwd
+      DB_SCHEM: public
       DB_ADDR: postgres
+      PROXY_ADDRESS_FORWARDING: true
+      KEYCLOAK_LOGLEVEL: DEBUG
     ports:
       - 8081:8081
     networks:
