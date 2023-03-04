@@ -231,10 +231,10 @@ services:
 ###########################################################
   postgres:
     image: postgres
+    container_name: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - /etc/passwd:/etc/passwd:ro
-    user: "1012:1012"
     networks:
       - transit_idp
     environment:
@@ -248,6 +248,7 @@ services:
 #################################################  
   keycloak:
     image: bitnami/keycloak:20
+    container_name: keycloak
     user: keycloak
     environment:
       KEYCLOAK_USER: admin
@@ -326,7 +327,6 @@ volumes:
   etc:
     external: true
   postgres_data:
-    driver: local
 ####################################################
 secrets:
   cf-api-email:
