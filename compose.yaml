@@ -260,7 +260,8 @@ services:
       KEYCLOAK_DATABASE_USER: keycloak
       KEYCLOAK_DATABASE_PASSWORD: asdfv
       KEYCLOAK_DATABASE_SCHEMA: public
-      KEYCLOAK_PROXY: edge 
+      KEYCLOAK_PROXY: edge
+      KEYCLOAK_LOGLEVEL: DEBUG
     ports:
       - 8081:8081
     networks:
