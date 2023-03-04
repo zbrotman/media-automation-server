@@ -229,56 +229,56 @@ services:
     labels:
       - traefik.enable=false
 ###########################################################
-  postgres:
-    image: postgres
-    container_name: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - /etc/passwd:/etc/passwd:ro
-    networks:
-      - transit_idp
-    environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: /run/secrets/postgres-passwd
-    labels:
-      - traefik.enable=false
-    secrets:
-      - postgres-passwd
-#################################################  
-  keycloak:
-    image: quay.io/keycloak/keycloak:legacy
-    container_name: keycloak
-    environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak-passwd
-      KEYCLOAK_MANAGEMENT_PASSWORD_FILE: /run/secrets/keycloak-management-passwd
-      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
-      #JDBC_PARAMS: "ssl=true"
-      DB_VENDOR: POSTGRES
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_PASSWORD: /run/secrets/keycloak-db-password
-      DB_SCHEM: public
-      DB_ADDR: postgres
-      PROXY_ADDRESS_FORWARDING: true
-      KEYCLOAK_LOGLEVEL: INFO
-    ports:
-      - 8081:8081
-    networks:
-      - transit_idp
-    depends_on:
-      - postgres
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.keycloak.rule=Host(`auth.snarky-jackal.com`)
-      - traefik.http.routers.keycloak.entrypoints=websecure
-      - traefik.http.routers.keycloak.tls.certresolver=lets-encrypt
-    secrets:
-      - postgres-passwd
-      - keycloak-passwd
-      - keycloak-management-passwd
- ####################################################  
+#   postgres:
+#     image: postgres
+#     container_name: postgres
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#       - /etc/passwd:/etc/passwd:ro
+#     networks:
+#       - transit_idp
+#     environment:
+#       POSTGRES_DB: keycloak
+#       POSTGRES_USER: keycloak
+#       POSTGRES_PASSWORD: /run/secrets/postgres-passwd
+#     labels:
+#       - traefik.enable=false
+#     secrets:
+#       - postgres-passwd
+# #################################################  
+#   keycloak:
+#     image: quay.io/keycloak/keycloak:legacy
+#     container_name: keycloak
+#     environment:
+#       KEYCLOAK_USER: admin
+#       KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak-passwd
+#       KEYCLOAK_MANAGEMENT_PASSWORD_FILE: /run/secrets/keycloak-management-passwd
+#       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+#       #JDBC_PARAMS: "ssl=true"
+#       DB_VENDOR: POSTGRES
+#       DB_DATABASE: keycloak
+#       DB_USER: keycloak
+#       DB_PASSWORD: /run/secrets/keycloak-db-password
+#       DB_SCHEM: public
+#       DB_ADDR: postgres
+#       PROXY_ADDRESS_FORWARDING: true
+#       KEYCLOAK_LOGLEVEL: INFO
+#     ports:
+#       - 8081:8081
+#     networks:
+#       - transit_idp
+#     depends_on:
+#       - postgres
+#     labels:
+#       - traefik.enable=true
+#       - traefik.http.routers.keycloak.rule=Host(`auth.snarky-jackal.com`)
+#       - traefik.http.routers.keycloak.entrypoints=websecure
+#       - traefik.http.routers.keycloak.tls.certresolver=lets-encrypt
+#     secrets:
+#       - postgres-passwd
+#       - keycloak-passwd
+#       - keycloak-management-passwd
+#  ####################################################  
   traefik:
     # The official v2 Traefik docker image
     image: traefik:v2.9
@@ -296,7 +296,7 @@ services:
     #- "--log.level=DEBUG"
     networks:
       - web
-      - transit_idp
+#      - transit_idp
     ports:
       # The HTTP port
       - 8085:8085
@@ -318,7 +318,7 @@ services:
 networks:
   web:
     external: true
-  transit_idp:
+#  transit_idp:
 ####################################################
 volumes:
 #  jellyfin-config:
