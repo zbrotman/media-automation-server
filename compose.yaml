@@ -262,7 +262,7 @@ services:
       DB_SCHEM: public
       DB_ADDR: postgres
       PROXY_ADDRESS_FORWARDING: true
-      KEYCLOAK_LOGLEVEL: DEBUG
+      KEYCLOAK_LOGLEVEL: INFO
     ports:
       - 8081:8081
     networks:
