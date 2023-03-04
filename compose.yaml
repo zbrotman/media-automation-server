@@ -247,7 +247,7 @@ services:
       - postgres-passwd
 #################################################  
   keycloak:
-    image: bitnami/keycloak:20
+    image: quay.io/keycloak/keycloak:21
     container_name: keycloak
     environment:
       KEYCLOAK_USER: admin
@@ -258,7 +258,7 @@ services:
       KEYCLOAK_DATABASE_HOST: POSTGRES
       KEYCLOAK_DATABASE_NAME: keycloak
       KEYCLOAK_DATABASE_USER: keycloak
-      KEYCLOAK_DATABASE_PASSWORD: change-me
+      KEYCLOAK_DATABASE_PASSWORD: /run/secrets/postgres-passwd
       KEYCLOAK_DATABASE_SCHEMA: public
       KEYCLOAK_PROXY: edge 
     ports:
