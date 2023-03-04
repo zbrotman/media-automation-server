@@ -202,7 +202,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 20s
-
     labels:
       - traefik.enable=true
       - traefik.http.routers.wireguard.rule=Host(`qbit.snarky-jackal.com`)
@@ -229,6 +228,53 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=false
+###########################################################
+  postgres:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - /etc/passwd:/etc/passwd:ro
+    user: "1012:1012"
+    networks:
+      - transit_idp
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-passwd
+    labels:
+      - traefik.enable=false
+    secrets:
+      - postgres-passwd
+#################################################  
+  keycloak:
+    image: bitnami/keycloak:20
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak-passwd
+      KEYCLOAK_MANAGEMENT_PASSWORD_FILE: /run/secrets/keycloak-management-passwd
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+      KEYCLOAK_DATABASE_HOST: POSTGRES
+      KEYCLOAK_DATABASE_NAME: keycloak
+      KEYCLOAK_DATABASE_USER: keycloak
+      KEYCLOAK_DATABASE_PASSWORD_FILE: /run/secrets/postgres-passwd
+      KEYCLOAK_DATABASE_SCHEMA: public
+      KEYCLOAK_PROXY: edge 
+    ports:
+      - 8081:8081
+    networks:
+      - transit_idp
+    depends_on:
+      - postgres
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.keycloak.rule=Host(`auth.snarky-jackal.com`)
+      - traefik.http.routers.keycloak.entrypoints=websecure
+      - traefik.http.routers.keycloak.tls.certresolver=lets-encrypt
+    secrets:
+      - postgres-passwd
+      - keycloak-passwd
+      - keycloak-management-passwd
  ####################################################  
   traefik:
     # The official v2 Traefik docker image
@@ -247,6 +293,7 @@ services:
     #- "--log.level=DEBUG"
     networks:
       - web
+      - transit_idp
     ports:
       # The HTTP port
       - 8085:8085
@@ -258,6 +305,8 @@ services:
       - /etc/traefik/traefik.toml:/traefik.toml
       - /etc/traefik/traefik_dynamic.toml:/traefik_dynamic.toml
       - /etc/traefik/acme.json:/acme.json
+    labels:
+      - traefik.enable=true
     secrets:
       - cf-api-email
       - cf-dns-api-token
@@ -266,6 +315,7 @@ services:
 networks:
   web:
     external: true
+  transit_idp:
 ####################################################
 volumes:
 #  jellyfin-config:
@@ -274,6 +324,8 @@ volumes:
     external: true
   etc:
     external: true
+  postgres_data:
+    driver: local
 ####################################################
 secrets:
   cf-api-email:
@@ -283,4 +335,10 @@ secrets:
   cf-dns-api-token:
     file: /home/jackal/.secrets/cf_dns_api_token
   wg-peer-private-key:
-   file: /home/jackal/.secrets/wg_peer_private_key
+    file: /home/jackal/.secrets/wg_peer_private_key
+  postgres-passwd:
+    file: /home/jackal/.secrets/postgres_passwd
+  keycloak-passwd:
+    file: /home/jackal/.secrets/keycloak_passwd
+  keycloak-management-passwd:
+    file: /home/jackal/.secrets/keycloak_management_passwd
