@@ -250,16 +250,17 @@ services:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
     environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: /run/secrets/postgres-passwd
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak-passwd
       KEYCLOAK_MANAGEMENT_PASSWORD: /run/secrets/keycloak-management-passwd
       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
       #JDBC_PARAMS: "ssl=true"
-      KEYCLOAK_DATABASE_HOST: POSTGRES
-      KEYCLOAK_DATABASE_NAME: keycloak
-      KEYCLOAK_DATABASE_USER: keycloak
-      KEYCLOAK_DATABASE_PASSWORD: /run/secrets/postgres-passwd
-      KEYCLOAK_DATABASE_SCHEMA: public
       KEYCLOAK_PROXY: edge 
     ports:
       - 8081:8081
