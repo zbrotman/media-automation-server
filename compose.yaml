@@ -258,7 +258,7 @@ services:
       KEYCLOAK_DATABASE_HOST: POSTGRES
       KEYCLOAK_DATABASE_NAME: keycloak
       KEYCLOAK_DATABASE_USER: keycloak
-      KEYCLOAK_DATABASE_PASSWORD_FILE: /run/secrets/postgres-passwd
+      KEYCLOAK_DATABASE_PASSWORD_FILE: "change-me"
       KEYCLOAK_DATABASE_SCHEMA: public
       KEYCLOAK_PROXY: edge 
     ports:
