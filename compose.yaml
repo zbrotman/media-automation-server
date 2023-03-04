@@ -262,6 +262,7 @@ services:
       KEYCLOAK_DATABASE_SCHEMA: public
       KEYCLOAK_PROXY: edge
       KEYCLOAK_LOGLEVEL: DEBUG
+      DB_ADDR: postgres
     ports:
       - 8081:8081
     networks:
