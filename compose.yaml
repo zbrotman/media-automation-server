@@ -256,7 +256,7 @@ services:
       DB_USER: keycloak
       DB_SCHEMA: public
       DB_PASSWORD: /run/secrets/postgres-passwd
-      KEYCLOAK_LOGLEVEL: INFO
+      KEYCLOAK_LOGLEVEL: DEBUG
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak-passwd
       KEYCLOAK_MANAGEMENT_PASSWORD: /run/secrets/keycloak-management-passwd
