@@ -248,6 +248,7 @@ services:
 #################################################  
   keycloak:
     image: bitnami/keycloak:20
+    user: keycloak
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak-passwd
