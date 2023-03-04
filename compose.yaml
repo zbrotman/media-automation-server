@@ -240,7 +240,7 @@ services:
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: asdfv
+      POSTGRES_PASSWORD: /run/secrets/postgres-passwd
     labels:
       - traefik.enable=false
     secrets:
@@ -258,7 +258,7 @@ services:
       KEYCLOAK_DATABASE_HOST: POSTGRES
       KEYCLOAK_DATABASE_NAME: keycloak
       KEYCLOAK_DATABASE_USER: keycloak
-      KEYCLOAK_DATABASE_PASSWORD: asdfv
+      KEYCLOAK_DATABASE_PASSWORD: /run/secrets/postgres-passwd
       KEYCLOAK_DATABASE_SCHEMA: public
       KEYCLOAK_PROXY: edge
       KEYCLOAK_LOGLEVEL: DEBUG
