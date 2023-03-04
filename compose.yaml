@@ -258,7 +258,7 @@ services:
       DB_VENDOR: POSTGRES
       DB_DATABASE: keycloak
       DB_USER: keycloak
-      DB_PASSWORD_FILE: /run/secrets/postgres-passwd
+      DB_PASSWORD: /run/secrets/keycloak-db-password
       DB_SCHEM: public
       DB_ADDR: postgres
       PROXY_ADDRESS_FORWARDING: true
@@ -344,3 +344,5 @@ secrets:
     file: /home/jackal/.secrets/keycloak_passwd
   keycloak-management-passwd:
     file: /home/jackal/.secrets/keycloak_management_passwd
+  keycloak-db-password:
+    file: /home/jackal/.secrets/keycloak_db_password

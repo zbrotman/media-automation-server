@@ -2,31 +2,54 @@ version: '3'
 
 volumes:
   postgres_data:
-      driver: local
-
+    driver: local
+networks:
+  transit_idp:
 services:
   postgres:
-      image: postgres
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      environment:
-        POSTGRES_DB: keycloak
-        POSTGRES_USER: keycloak
-        POSTGRES_PASSWORD: password
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: /run/secrets/postgres-passwd
+    networks:
+      - transit_idp
+    secrets:
+      - postgres-passwd
   keycloak:
-      image: quay.io/keycloak/keycloak:legacy
-      environment:
-        DB_VENDOR: POSTGRES
-        DB_ADDR: postgres
-        DB_DATABASE: keycloak
-        DB_USER: keycloak
-        DB_SCHEMA: public
-        DB_PASSWORD: password
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: Pa55w0rd
-        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
-        #JDBC_PARAMS: "ssl=true"
-      ports:
-        - 8082:8082
-      depends_on:
-        - postgres
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD_FILE: /run/secrets/keycloak-passwd
+      KEYCLOAK_MANAGEMENT_PASSWORD_FILE: /run/secrets/keycloak-management-passwd
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: /run/secrets/keycloak-db-password
+      #KEYCLOAK_USER: admin
+      #KEYCLOAK_PASSWORD: Pa55w0rd
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    ports:
+      - 8082:8082
+    networks:
+      - transit_idp
+    depends_on:
+      - postgres
+    secrets:
+      - keycloak-passwd
+      - keycloak-management-passwd
+      - keycloak-db-password
+secrets:
+  keycloak-passwd:
+    file: /home/jackal/.secrets/keycloak_passwd
+  keycloak-management-passwd:
+    file: /home/jackal/.secrets/keycloak_management_passwd
+  keycloak-db-password:
+    file: /home/jackal/.secrets/keycloak_db_password
+  postgres-passwd:
+    file: /home/jackal/.secrets/postgres_passwd
