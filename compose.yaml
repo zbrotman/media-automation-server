@@ -308,8 +308,10 @@ services:
       - /etc/traefik/traefik.toml:/traefik.toml
       - /etc/traefik/traefik_dynamic.toml:/traefik_dynamic.toml
       - /etc/traefik/acme.json:/acme.json
+      - /etc/traefik/users:/users
     labels:
       - traefik.enable=true
+      - "traefik.http.middlewares.test-auth.basicauth.usersfile=/path/to/my/usersfile"
     secrets:
       - cf-api-email
       - cf-dns-api-token
